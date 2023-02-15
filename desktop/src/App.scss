@@ -1,0 +1,119 @@
+$main-color: #006eff;
+
+body * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  width: 100vw;
+  background-color: $main-color;
+  color: white;
+  margin-bottom: 1em;
+  h1 {
+    text-align: center;
+    margin: 0;
+    padding: 0.3em 0 0.6em 0;
+  }
+}
+
+main {
+  width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.searchbar {
+  font-size: 1.2em;
+  line-height: 1.7em;
+  max-width: 700px;
+  width: 100%;
+  .search-field {
+    margin-right: 10px;
+    width: 75%;
+    line-height: inherit;
+    font-size: inherit;
+    height: 2em;
+    border-width: 4px;
+    border-style: solid;
+    border-color: black;
+  }
+  .submit-button {
+    line-height: inherit;
+    font-size: inherit;
+    width: 23%;
+    height: 1.85em;
+    background-color: $main-color;
+    color: white;
+    border-radius: -10px;
+    border-width: 3px;
+    box-shadow: 5px 5px 2px black;
+  }
+}
+
+.task-list {
+  max-width: 700px;
+  width: 100%;
+  * {
+    font-size: 16px;
+    line-height: 18px;
+  }
+  p {
+    opacity: 0.5;
+    font-size: 1.3em;
+    font-style: italic;
+    letter-spacing: 1.5px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    li {
+      margin-bottom: 1.5em;
+    }
+    form {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  .wrapper {
+    width: 100%;
+    max-width: 600px;
+    height: max-content;
+    display: flex;
+    align-items: center;
+  }
+  input[type="checkbox"] {
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+    margin: 0 10px 0 0;
+  }
+  input[type="text"] {
+    height: 30px;
+    width: 80%;
+    max-width: 400px;
+    font-size: 20px;
+    color: initial;
+    border: none;
+    padding-bottom: 0;
+  }
+  input[type="button"] {
+    padding: 0;
+    height: 25px;
+    width: 25px;
+    line-height: 20px;
+    border: 3px solid $main-color;
+    color: $main-color;
+    border-radius: 50%;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .faded {
+    opacity: 0.5;
+  }
+}
