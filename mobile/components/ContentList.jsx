@@ -1,3 +1,6 @@
+/**
+ *  Imports
+ */
 // Import dependencies
 import React from "react";
 import {
@@ -10,11 +13,21 @@ import {
 
 // Import npm package
 import CheckBox from "@react-native-community/checkbox";
+//_________________________________________________________
 
-// Component function start
+/**
+ *  Component function start
+ */
 const ContentList = (props) => {
+  /**
+   *  Props recieving section
+   */
   const tasks = props.tasks; // Get tasks from props
+  //_________________________________________________________
 
+  /**
+   *  DOM model section
+   */
   // If no tasks were send by props, let user know there are no tasks
   if (tasks.length === 0) {
     return <Text style={styles.addText}>Add your first task please</Text>;
@@ -54,9 +67,13 @@ const ContentList = (props) => {
       </View>
     );
   }
+  //_______________________________________________________
 };
+//_#Component_function_end__________________________________
 
-// Define styles for this component
+/**
+ *  Styles section
+ */
 const styles = StyleSheet.create({
   listItem: {
     flexDirection: "row",
@@ -99,6 +116,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 });
+//_____________________________________________________________
 
 // Export component
 export default ContentList;

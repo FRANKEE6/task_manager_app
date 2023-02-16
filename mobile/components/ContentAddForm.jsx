@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+//_____________________________________________________________
 
 // Export component
 export default ContentSearchForm;
