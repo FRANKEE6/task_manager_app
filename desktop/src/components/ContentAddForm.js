@@ -2,16 +2,16 @@
 import React, { createRef } from "react";
 
 // Component function start
-const ContentSearchForm = (props) => {
-    // Create ref for our search input so we can access value of it
-    const searchInput = createRef();
+const ContentAddForm = (props) => {
+    // Create ref for our add input so we can access value of it
+    const addInput = createRef();
 
     // Function listening to key press in our imput field
     function handleSubmitEnter(event) {
         if (event.key === "Enter"){         // If key pressed was enter
             event.preventDefault()          // Prevent page reload
             logInput();                     // Call function to process data
-            searchInput.current.value = ""; // Clear input field
+            addInput.current.value = ""; // Clear input field
         }
     }
 
@@ -19,15 +19,18 @@ const ContentSearchForm = (props) => {
     function handleSubmitButton(event) {
         event.preventDefault()              // Prevent page reload
         logInput();                         // Call function to process data
-        searchInput.current.value = "";     // Clear input field
+        addInput.current.value = "";     // Clear input field
     }
 
     // Function which processes data from input field
     const logInput = () => {
-        let searchString = searchInput.current?.value;  // Retrieve value from input field
-        if (searchString) props.onSearch(searchString); // If value exists, send it to parent
+        let addString = addInput.current?.value;  // Retrieve value from input field
+        if (addString) props.onAdd(addString); // If value exists, send it to parent
     }
 
+    /**
+     *  DOM model section
+     */
     return (
         <form 
             onKeyPress={handleSubmitEnter}
@@ -35,8 +38,8 @@ const ContentSearchForm = (props) => {
             >
             <input
                 type="text"
-                ref={searchInput}
-                className="search-field"
+                ref={addInput}
+                className="add-field"
                 autoFocus
             />
             <input
@@ -49,4 +52,4 @@ const ContentSearchForm = (props) => {
 }
 
 // Export component
-export default ContentSearchForm;
+export default ContentAddForm;

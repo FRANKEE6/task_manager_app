@@ -10,7 +10,7 @@ import axios from "axios";
 import io from "socket.io-client";
 
 // Import our custom components
-import ContentSearchForm from "./ContentAddForm.jsx";
+import ContentAddForm from "./ContentAddForm.jsx";
 import ContentList from "./ContentList";
 //_________________________________________________________
 
@@ -60,12 +60,12 @@ const TheContent = () => {
    *  Functions section
    */
   /**
-   * Function being called by prop when new task is added in ContentSearchForm component
-   * @param {string} searchString
+   * Function being called by prop when new task is added in ContentAddForm component
+   * @param {string} addString
    * @returns {void}
    */
-  const handleNewTask = (searchString) => {
-    let text = JSON.stringify(searchString); // Make our new task text json
+  const handleNewTask = (addString) => {
+    let text = JSON.stringify(addString); // Make our new task text json
     let jsonData = { text }; // Wrap our json text as obj
 
     // Send data to API
@@ -129,8 +129,8 @@ const TheContent = () => {
    */
   return (
     <>
-      <View style={styles.searchForm}>
-        <ContentSearchForm onSearch={handleNewTask} />
+      <View style={styles.addForm}>
+        <ContentAddForm onSearch={handleNewTask} />
       </View>
       <View>
         <ContentList tasks={tasks} onEdit={handleTaskChange} />
@@ -145,7 +145,7 @@ const TheContent = () => {
  *  Styles section
  */
 const styles = StyleSheet.create({
-  searchForm: {
+  addForm: {
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
