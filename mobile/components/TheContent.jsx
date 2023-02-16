@@ -130,7 +130,7 @@ const TheContent = () => {
   return (
     <>
       <View style={styles.addForm}>
-        <ContentAddForm onSearch={handleNewTask} />
+        <ContentAddForm onAdd={handleNewTask} />
       </View>
       <View>
         <ContentList tasks={tasks} onEdit={handleTaskChange} />

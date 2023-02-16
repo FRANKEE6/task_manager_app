@@ -15,7 +15,7 @@ import {
 /**
  *  Component function start
  */
-const ContentSearchForm = (props) => {
+const ContentAddForm = (props) => {
   /**
    *  State section
    */
@@ -26,7 +26,7 @@ const ContentSearchForm = (props) => {
    *  Functions secton
    */
   function handleSubmit() {
-    if (addValue) props.onSearch(addValue); // Chceck if addValue holds data, if yes send them to parent by props callback
+    if (addValue) props.onAdd(addValue); // Chceck if addValue holds data, if yes send them to parent by props callback
 
     setAddValue(""); // Set our state to an empty string
   }
@@ -39,7 +39,7 @@ const ContentSearchForm = (props) => {
     <>
       <TextInput
         autoFocus
-        style={styles.searchInput}
+        style={styles.addInput}
         onChangeText={(text) => {
           setAddValue(text);
         }}
@@ -48,8 +48,8 @@ const ContentSearchForm = (props) => {
         blurOnSubmit={true}
       />
       <TouchableOpacity onPress={handleSubmit}>
-        <View style={styles.searchButton}>
-          <Text style={styles.searchButtonText}>Add</Text>
+        <View style={styles.addButton}>
+          <Text style={styles.addButtonText}>Add</Text>
         </View>
       </TouchableOpacity>
     </>
@@ -62,7 +62,7 @@ const ContentSearchForm = (props) => {
  *  Styles section
  */
 const styles = StyleSheet.create({
-  searchInput: {
+  addInput: {
     width: "75%",
     height: 40,
     borderWidth: 3,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     fontSize: 17,
   },
-  searchButton: {
+  addButton: {
     width: 55,
     height: 37,
     padding: 0,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "black",
   },
-  searchButtonText: {
+  addButtonText: {
     color: "white",
     fontWeight: "bold",
   },
@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
 //_____________________________________________________________
 
 // Export component
-export default ContentSearchForm;
+export default ContentAddForm;
