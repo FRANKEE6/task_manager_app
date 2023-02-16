@@ -1,3 +1,6 @@
+/**
+ *  Imports
+ */
 // Import dependecies
 import React, { useState } from "react";
 import {
@@ -7,28 +10,40 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+//_________________________________________________________
 
-// Component function start
+/**
+ *  Component function start
+ */
 const ContentSearchForm = (props) => {
-  // Define state which will hold changes in input field
-  const [searchValue, setSearchValue] = useState();
+  /**
+   *  State section
+   */
+  const [addValue, setAddValue] = useState(); // Define state which will hold changes in input field
+  //_______________________________________________________
 
-  // Runs on submit
+  /**
+   *  Functions secton
+   */
   function handleSubmit() {
-    if (searchValue) props.onSearch(searchValue); // Chceck if searchValue holds data, if yes send them to parent by props callback
+    if (addValue) props.onSearch(addValue); // Chceck if addValue holds data, if yes send them to parent by props callback
 
-    setSearchValue(""); // Set our state to an empty string
+    setAddValue(""); // Set our state to an empty string
   }
+  //_______________________________________________________
 
+  /**
+   *  DOM model section
+   */
   return (
     <>
       <TextInput
         autoFocus
         style={styles.searchInput}
         onChangeText={(text) => {
-          setSearchValue(text);
+          setAddValue(text);
         }}
-        value={searchValue}
+        value={addValue}
         onSubmitEditing={handleSubmit}
         blurOnSubmit={true}
       />
@@ -39,9 +54,13 @@ const ContentSearchForm = (props) => {
       </TouchableOpacity>
     </>
   );
+  //_______________________________________________________
 };
+//_#Component_function_end__________________________________
 
-// Define styles for component
+/**
+ *  Styles section
+ */
 const styles = StyleSheet.create({
   searchInput: {
     width: "75%",

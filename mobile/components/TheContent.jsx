@@ -92,7 +92,7 @@ const TheContent = () => {
    * @param {string} [newText=""] - New text value for "edit-text" action, default is empty string
    * @returns {void}
    */
-  function handleTaskChange(id, action, newText = "") {
+  const handleTaskChange = (id, action, newText = "") => {
     // If user want to edit text, but provided no text or just whitespaces stop function
     if (action === "edit-text" && newText.trim().length === 0) return;
 
@@ -121,7 +121,7 @@ const TheContent = () => {
       .then(() => {
         socket.emit("update_data"); // After data update, let socket know about it
       });
-  }
+  };
   //________________________________________________________
 
   /**
