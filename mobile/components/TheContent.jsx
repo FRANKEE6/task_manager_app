@@ -1,3 +1,6 @@
+/**
+ *  Imports
+ */
 // Import dependencies
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
@@ -7,34 +10,61 @@ import axios from "axios";
 import io from "socket.io-client";
 
 // Import our custom components
-import ContentSearchForm from "./ContentSearchForm.jsx";
+import ContentSearchForm from "./ContentAddForm.jsx";
 import ContentList from "./ContentList";
+//_________________________________________________________
 
+/**
+ *  Other data
+ */
 // Rest API url
 const url = "http://10.0.2.2:3500/";
-
+// Connect to Api socket url
 const socket = io.connect("http://10.0.2.2:3500");
+//_________________________________________________________
 
-// Component function start
+/**
+ *  Component function start
+ */
 const TheContent = () => {
-  // Define state which will hold our tasks data
-  const [tasks, setTasks] = useState([]);
+  /**
+   *  State section
+   */
+  const [tasks, setTasks] = useState([]); // Define state which will hold our tasks data
+  //_______________________________________________________
 
+  /**
+   *  use Effect section
+   */
+  // Connect to our socket only on first render and collect data
   useEffect(() => {
+    // Uppon connection api will send us all data
     socket.on("init", (data) => {
-      if (!data) return; // If there are no tasks, return
+      if (!data) return; // If there are no tasks in data, return
       data = JSON.parse(data); // Parse our data from Json
       setTasks(data); // Save data to state
     });
+  }, []);
 
+  // Only when socket is communicating run this code which recieves update of data
+  useEffect(() => {
+    // When socket emmits fresh data message it will send us updated dataset
     socket.on("fresh_data", (data) => {
-      data = JSON.parse(data);
-      setTasks(data);
+      data = JSON.parse(data); // Parse our data from Json
+      setTasks(data); // Save data to state
     });
   }, [socket]);
+  //_______________________________________________________
 
-  // Function being called by prop when new task is added in ContentSearchForm component
-  function handleNewTask(searchString) {
+  /**
+   *  Functions section
+   */
+  /**
+   * Function being called by prop when new task is added in ContentSearchForm component
+   * @param {string} searchString
+   * @returns {void}
+   */
+  const handleNewTask = (searchString) => {
     let text = JSON.stringify(searchString); // Make our new task text json
     let jsonData = { text }; // Wrap our json text as obj
 
@@ -51,16 +81,16 @@ const TheContent = () => {
         alert("Sorry, something went wrong"); // Alert user that add request failed
       })
       .then(() => {
-        socket.emit("update_data");
+        socket.emit("update_data"); // After data update, let socket know about it
       });
-  }
+  };
 
   /**
    *  Function being called by prop wwhen existing task was edited
    * @param {int} id - The id of task
    * @param {string} action - Type of action to be done ("check-change", "edit-text", "delete")
-   * @param {string} [newText = ""] - New text value for "edit-text" action
-   * @returns void
+   * @param {string} [newText=""] - New text value for "edit-text" action, default is empty string
+   * @returns {void}
    */
   function handleTaskChange(id, action, newText = "") {
     // If user want to edit text, but provided no text or just whitespaces stop function
@@ -89,10 +119,14 @@ const TheContent = () => {
         alert("Sorry, something went wrong");
       })
       .then(() => {
-        socket.emit("update_data");
+        socket.emit("update_data"); // After data update, let socket know about it
       });
   }
+  //________________________________________________________
 
+  /**
+   *  DOM model section
+   */
   return (
     <>
       <View style={styles.searchForm}>
@@ -103,9 +137,13 @@ const TheContent = () => {
       </View>
     </>
   );
+  //________________________________________________________
 };
+//_#Component_function_end__________________________________
 
-// Styles for component
+/**
+ *  Styles section
+ */
 const styles = StyleSheet.create({
   searchForm: {
     width: "100%",
@@ -115,6 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 });
+//_____________________________________________________________
 
 // Export our component
 export default TheContent;
