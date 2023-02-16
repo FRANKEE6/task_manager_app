@@ -1,22 +1,37 @@
+/**
+ *  Imports
+ */
 // Import dependencies
 import React, { useState, useEffect } from "react";
+//_________________________________________________________
 
-// Component function start
+/**
+ *  Component function start
+ */
 const ContentList = (props) => {
-    // Get tasks from props
-    const tasks = props.tasks;
+    /**
+     *  Data section
+     */
+    const tasks = props.tasks; // Extract our tasks from props
     
     const [liValues, setLiValues] = useState(""); // Create state for component so we can adjust value of text input
+    //_________________________________________________________
 
-    // Everytime we recieve new props we will update our state with those values
+    /**
+     *  use Effect section
+     */
+    // Only when we recieve new props from parent, we will update our state with those values
     useEffect(() => {
       let data = tasks
       setLiValues(data);
     }, [props])
+    //_________________________________________________________
     
-    
+    /**
+     *  functions section
+     */
     // Function handling submit of new text value of task
-    function handleTextSub(event){
+    const handleTextSub = (event) => {
         event.preventDefault()          // Prevent page reaload
 
         document.activeElement.blur();  // Blur marked input, which will trigger OnBlur fuction of input element (that function sends all data to parent)
@@ -34,10 +49,13 @@ const ContentList = (props) => {
             return task;
           });
           
-          setLiValues(taskTextEdit);
+          setLiValues(taskTextEdit); // Update state of this component
     }
+    //_________________________________________________________
 
-
+    /**
+     *  DOM model section
+     */
     // Let urer know we have no tasks added
     if(liValues.length === 0){
         return (
@@ -46,11 +64,10 @@ const ContentList = (props) => {
             </p>
         )
     }
-
+    // If we do have tasks, render them
     else {
         return (
             <ul>
-            
             {liValues.map(task => (
                 <li key={task.id}>
                     <form 
@@ -82,11 +99,12 @@ const ContentList = (props) => {
                     </form>
                 </li>
             ))}
-
         </ul>
         )
     }
+    //________________________________________________________
 };
+//_#Component_function_end__________________________________
 
 // Export component
 export default ContentList;
