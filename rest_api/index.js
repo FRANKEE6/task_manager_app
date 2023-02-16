@@ -1,3 +1,6 @@
+/**
+ *  Imports and setup
+ */
 //file system package - promises version
 const fsp = require("fs/promises");
 const fs =  require("fs");
@@ -7,9 +10,6 @@ const express = require("express");
 
 //cross origin resource sharing
 const cors = require("cors");
-
-//web socket
-//const WebSocket = require('ws');
 
 //server setup
 const app = express();
@@ -25,29 +25,39 @@ app.use(express.json());
 //make cross origin resource sharing possible
 app.use(cors());
 
+//define settings of io socket
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
+//_______________________________________________
 
+/**
+ *  Socket section
+ */
 io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`)
+  console.log(`User connected: ${socket.id}`)     //Log id of connected user
   let tasks;
-  tasks = fs.readFileSync(`data.json`, "utf-8");
-  socket.emit("init", tasks);
+  tasks = fs.readFileSync(`data.json`, "utf-8");  //Retrive data from file
+  socket.emit("init", tasks);                     //Send dataset to this user
 
+  // When any user updates data successfully, he will send us "update_data" message
   socket.on("update_data", () => {
     let freshData;
-    freshData = fs.readFileSync(`data.json`, "utf-8");
-    io.sockets.emit("fresh_data", freshData)
+    freshData = fs.readFileSync(`data.json`, "utf-8");  //Retrieve data from file
+    io.sockets.emit("fresh_data", freshData)            //Send new dataset to all connected users including sender
   });
 })
+//_______________________________________________
 
 
-// Upon recieving post request on /tasks
-app.post("/tasks", async (req, res) => {
+/**
+ *  REST section
+ */
+// Upon recieving post request on /update
+app.post("/update", async (req, res) => {
     // Recieve and save data to variable
     let id = req.body.id,
         action = req.body.action,
@@ -123,14 +133,13 @@ app.post("/tasks", async (req, res) => {
           break;
     }
 
-
     // Create Json format from our task array
     tasks = JSON.stringify(tasks);
 
     // Rewrite old data with new one
     fs.writeFileSync(`data.json`, tasks);
 
-    // Send back new dataset
+    // Send back OK status
     res.sendStatus(200);
 
 })
@@ -189,9 +198,11 @@ app.post("/add", async (req, res) => {
     // Rewrite old data with new one
     await fsp.writeFile(`data.json`, tasks);
 
-    // Send back new dataset
+    // Send back "Created" status
     res.sendStatus(201);
 })
+//_______________________________________________
+
 
 // Listen on 3500 server port, send console log on successful start
 server.listen(3500, () => console.log("API Server is running..."));

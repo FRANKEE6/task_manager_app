@@ -108,7 +108,7 @@ const TheContent = () => {
 
     // Send data to API
     axios
-      .post(`${url}tasks`, jsonData, {
+      .post(`${url}update`, jsonData, {
         // Need to define content-type so API know that Json is being sent
         headers: {
           "Content-Type": "application/json",
