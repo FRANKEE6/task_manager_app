@@ -27,7 +27,7 @@ const socket = io.connect("http://localhost:3500");
  */
 const TheContent = () => {
     /**
-     *  State section
+     *  Data section
      */
     const [tasks, setTasks] = useState([]); // Define state which will hold our tasks data
     //_______________________________________________________
