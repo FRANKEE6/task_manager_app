@@ -18,9 +18,9 @@ import ContentList from "./ContentList";
  *  Other data
  */
 // Rest API url
-const url = "http://10.0.2.2:3500/";
+const url = "https://simpletask-api.onrender.com/";
 // Connect to Api socket url
-const socket = io.connect("http://10.0.2.2:3500");
+const socket = io.connect("wss://simpletask-api.onrender.com");
 //_________________________________________________________
 
 /**

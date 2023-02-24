@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import { Colors, LearnMoreLinks } from "react-native/Libraries/NewAppScreen";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import TheContent from "./components/TheContent.jsx";
 

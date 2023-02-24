@@ -28,7 +28,7 @@ app.use(cors());
 //define settings of io socket
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -203,6 +203,31 @@ app.post("/add", async (req, res) => {
 })
 //_______________________________________________
 
+/**
+ *  HTML section
+ */
+ app.get("/", (req, res) => res.type('html').send(html));
 
+ const html = `
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <title>Simpletask API</title>
+     <style>
+        h1 {
+          text-align: center;
+        }
+     </style>
+   </head>
+   <body>
+     <section>
+       <h1>Welcome to Simple task manager REST API</h1>
+     </section>
+   </body>
+ </html>
+ `
+ //_______________________________________________
+
+const port = process.env.PORT || 3500;
 // Listen on 3500 server port, send console log on successful start
-server.listen(3500, () => console.log("API Server is running..."));
+server.listen(port, () => console.log("API Server is running..."));
