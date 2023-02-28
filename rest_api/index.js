@@ -5,6 +5,9 @@
 const fsp = require("fs/promises");
 const fs =  require("fs");
 
+//hashing package
+const {compareHashAndPassword} = require('node-hash-password');
+
 //web server
 const express = require("express");
 
@@ -32,6 +35,10 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
+//database routes
+const contentData = "./database/contentData.json";
+const usersData = "./database/usersData.json";
 //_______________________________________________
 
 /**
@@ -40,22 +47,113 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`)     //Log id of connected user
   let tasks;
-  tasks = fs.readFileSync(`data.json`, "utf-8");  //Retrive data from file
+  tasks = fs.readFileSync(contentData, "utf-8");  //Retrive data from file
   socket.emit("init", tasks);                     //Send dataset to this user
 
   // When any user updates data successfully, he will send us "update_data" message
   socket.on("update_data", () => {
     let freshData;
-    freshData = fs.readFileSync(`data.json`, "utf-8");  //Retrieve data from file
+    freshData = fs.readFileSync(contentData, "utf-8");  //Retrieve data from file
     io.sockets.emit("fresh_data", freshData)            //Send new dataset to all connected users including sender
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.log(`User disconnected: ${socket.id}`);
+    console.log(reason);
   });
 })
 //_______________________________________________
 
 
+
 /**
  *  REST section
  */
+app.post("/register", async (req, res) => {
+  // Recieve and save data to variable
+  let userName = req.body.user,
+      userPassword = JSON.parse(req.body.hashedPswd),
+      users,
+      userExists = false;
+
+  users = await fsp.readFile(usersData, "utf-8");
+    
+  // If we did not retrieved any data from file, set ID to 1
+  if (!users.length || users === "[]"){
+  }
+  
+  // Else parse our json data for future work. Also find highest id number and increment it
+  else {
+    users = JSON.parse(users);
+    users.map((user) => {
+      if (user.userName === userName) {
+        userExists = true;
+      }
+    });
+  }
+  
+  if (userExists) return res.sendStatus(409)
+  else {
+    // Create new object and fill it with data
+    let userData = {
+        userName: userName,
+        userPassword: userPassword,
+        };
+
+    // Push it to array
+    userData = [userData]
+
+    // Again if we do not have any data from file, tasks will contain just our new task from post request
+    if (!users.length || users === "[]"){
+        users = userData;
+    }
+    // Else we will megre both arrays to one
+    else {
+        users = (users.concat(userData));
+    }
+
+    // Create Json format from our task array
+    users = JSON.stringify(users);
+
+    // Rewrite old data with new one
+    await fsp.writeFile(usersData, users);
+
+    // Send back "Created" status
+    res.sendStatus(201);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  // Recieve and save data to variable
+  let userName = req.body.user,
+      userPassword = req.body.pswd,
+      users;
+
+  users = await fsp.readFile(usersData, "utf-8");
+
+  users = JSON.parse(users);
+  var foundUserPass = "";
+
+  users.map((user) => {
+    if (user.userName === userName) {
+      foundUserPass = user.userPassword;
+      return
+    }
+  });
+
+  const passwordMatch = compareHashAndPassword({
+    method: "keccak256",
+    hash: foundUserPass,
+    password: userPassword
+  });
+
+  if (passwordMatch){
+    res.sendStatus(200)
+  }
+  else res.sendStatus(403)
+
+});
+
 // Upon recieving post request on /update
 app.post("/update", async (req, res) => {
     // Recieve and save data to variable
@@ -71,7 +169,7 @@ app.post("/update", async (req, res) => {
     }
 
     // Retrieve data from file
-    tasks = fs.readFileSync(`data.json`, "utf-8");
+    tasks = fs.readFileSync(contentData, "utf-8");
     
     // Parse our recieved json data so we can work with them
     id = JSON.parse(id);
@@ -137,7 +235,7 @@ app.post("/update", async (req, res) => {
     tasks = JSON.stringify(tasks);
 
     // Rewrite old data with new one
-    fs.writeFileSync(`data.json`, tasks);
+    fs.writeFileSync(contentData, tasks);
 
     // Send back OK status
     res.sendStatus(200);
@@ -158,7 +256,7 @@ app.post("/add", async (req, res) => {
     }
 
     // Retrieve data from file
-    tasks = await fsp.readFile(`data.json`, "utf-8");
+    tasks = await fsp.readFile(contentData, "utf-8");
     
     // Parse our recieved json data so we can work with them
     text = JSON.parse(text);
@@ -196,7 +294,7 @@ app.post("/add", async (req, res) => {
     tasks = JSON.stringify(tasks);
 
     // Rewrite old data with new one
-    await fsp.writeFile(`data.json`, tasks);
+    await fsp.writeFile(contentData, tasks);
 
     // Send back "Created" status
     res.sendStatus(201);

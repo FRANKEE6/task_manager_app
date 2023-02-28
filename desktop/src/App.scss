@@ -42,17 +42,17 @@ main {
     border-style: solid;
     border-color: black;
   }
-  .submit-button {
-    line-height: inherit;
-    font-size: inherit;
-    width: 23%;
-    height: 1.85em;
-    background-color: $main-color;
-    color: white;
-    border-radius: -10px;
-    border-width: 3px;
-    box-shadow: 5px 5px 2px black;
-  }
+}
+.submit-button {
+  line-height: inherit;
+  font-size: inherit;
+  width: 23%;
+  height: 1.85em;
+  background-color: $main-color;
+  color: white;
+  border-radius: -10px;
+  border-width: 3px;
+  box-shadow: 5px 5px 2px black;
 }
 
 .task-list {
@@ -116,4 +116,91 @@ main {
   .faded {
     opacity: 0.5;
   }
+}
+
+.offscreen {
+  display: none;
+}
+
+.msg {
+  display: block;
+  position: absolute;
+  top: 10vh;
+  left: 0;
+  max-width: 40vw;
+  width: 300px;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: red;
+}
+
+.invalid {
+  border-color: crimson;
+  border-width: 3px;
+}
+
+.switch-button {
+  background-color: $main-color;
+  color: white;
+  margin-top: 0.8em;
+  border-radius: 15px;
+  border: unset;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.register-form,
+.login-form {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.2em;
+
+  input[type="text"],
+  input[type="password"] {
+    line-height: 1.5em;
+    border-style: solid;
+    background-color: unset;
+    border-radius: 5px;
+  }
+
+  input[type="submit"] {
+    margin-top: 0.5em;
+    cursor: pointer;
+  }
+
+  label:not(:first-of-type) {
+    margin-top: 1em;
+  }
+
+  input:focus-visible {
+    outline: unset;
+  }
+
+  .instructions {
+    display: block;
+    font-size: 0.8em;
+    border: 1px dotted black;
+    padding: 10px;
+  }
+}
+
+input[type="submit"]:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.logOffButton {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  background-color: white;
+  color: $main-color;
+  border-radius: 15px;
+  border: unset;
+  cursor: pointer;
+  font-weight: bold;
 }

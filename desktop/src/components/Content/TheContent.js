@@ -5,27 +5,22 @@
 import React, {useState, useEffect} from "react";
 
 // Import npm package
-import axios from "axios";
+import axios from "../../api/axios";
 import io from "socket.io-client";
+import socketURL from "../../api/socket";
+
 
 // Import our custom components
 import ContentAddForm from "./ContentAddForm";
 import ContentList from "./ContentList";
 //_________________________________________________________
 
-/**
- *  Other data
- */
-// Rest API url
-const url = 'https://simpletask-api.onrender.com/';
-// Connect to Api socket url
-const socket = io.connect("wss://simpletask-api.onrender.com");
-//_________________________________________________________
+var socket;
 
 /**
  *  Component function start
  */
-const TheContent = () => {
+const TheContent = (props) => {
     /**
      *  Data section
      */
@@ -38,12 +33,15 @@ const TheContent = () => {
     // Connect to our socket only on first render and collect data
     useEffect(() => {
         // Uppon connection api will send us all data
-        socket.on("init", (data) => {
-            if (!data) return;          // If there are no tasks, return
-            data = JSON.parse(data);    // Parse our data from Json
-            setTasks(data);             // Save data to state
-        });
-    }, [])
+        if (props.authorizedUser){
+            socket = io.connect(socketURL);
+            socket.on("init", (data) => {
+                if (!data) return;          // If there are no tasks, return
+                data = JSON.parse(data);    // Parse our data from Json
+                setTasks(data);             // Save data to state
+            });
+        }
+    }, [props.authorizedUser])
 
     // Only when socket is communicating run this code which recieves update of data
     useEffect(() => {
@@ -69,7 +67,7 @@ const TheContent = () => {
         
         // Send data to API
         axios
-            .post(`${url}add`, jsonData, {
+            .post(`/add`, jsonData, {
                 // Need to define content-type so API know what is being sent
                 headers: {
                 "Content-Type": "application/json",
@@ -107,7 +105,7 @@ const TheContent = () => {
 
         // Send data to API
         axios
-            .post(`${url}update`, jsonData, {
+            .post(`/update`, jsonData, {
                 // Need to define content-type so API know what is being sent
                 headers: {
                 "Content-Type": "application/json",
@@ -121,6 +119,11 @@ const TheContent = () => {
                 socket.emit("update_data"); // After data update, let socket know about it
             });
     }
+
+    const userLoggedStatus = () => {
+        socket.disconnect();
+        props.loginStatus(false);
+      }
     //_______________________________________________________
 
     /**
@@ -128,6 +131,9 @@ const TheContent = () => {
      */
     return (
         <>
+        <button className="logOffButton" type="button" onClick={userLoggedStatus}>
+            Log off
+        </button>
         <div className="addbar">
             <ContentAddForm onAdd={handleNewTask}/>
         </div>
